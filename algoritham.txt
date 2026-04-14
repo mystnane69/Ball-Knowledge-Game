@@ -1,0 +1,62 @@
+This is the heart of the game. If the math here is lazy, the game gets boring quickly. To make it a true test of "Ball Knowledge," we cannot just add up the `overall_rating` of the players. Anyone can draft Haaland and Mbappe. 
+
+True ball knowledge is drafting Wout Weghorst because you are forced to play a Deep Block & Counter-Attack, and you need a "Target Man" to make the system work.
+
+Here is the master mathematical blueprint for the **100-Point Ball Knowledge Engine**, specifically designed to be written in Vanilla JavaScript using your `database.json`.
+
+---
+
+### 🧮 The 100-Point Formula (The Algorithm)
+
+Your JavaScript engine will run three separate checks when the user clicks "Submit Lineup."
+
+#### 1. Positional Discipline (Max 30 Points)
+*The game checks if you actually know where players belong on a football pitch.*
+* **The Math:** The user starts with 30 points. 
+* **The Rules:** Your code looks at the chosen formation (e.g., 4-3-3) and checks if the correct number of players are in the correct macro-positions (1 GK, 4 DEF, 3 MID, 3 ATT).
+* **The Penalties:** * **-10 Points** for not having exactly 1 GK.
+    * **-5 Points** for every outfield player out of position (e.g., trying to sneak a 4th ATT into a MID slot because you didn't draft enough midfielders).
+
+#### 2. Tactical Synergy (Max 40 Points)
+*The most important metric. Does your squad's `chemistry_role` match your overall Team Tactic?*
+* **The Math:** Every player contributes to this score based on how well their specific role fits the overarching philosophy. 
+* **The Logic (Examples for your `game.js`):**
+    * **If Tactic = "Gegenpressing":** * *Bonus (+4 pts):* Box-to-Box Engine, Aggressive Stopper, Inside Forward.
+        * *Penalty (-2 pts):* Deep Playmaker (too slow to press), Traditional Keeper.
+    * **If Tactic = "Deep Block & Counter":**
+        * *Bonus (+4 pts):* Stopper, Target Man, Winger (for fast breaks).
+        * *Penalty (-2 pts):* Sweeper Keeper (caught out of position), Inverted Full-back.
+    * **If Tactic = "Positional Play (Tiki-Taka)":**
+        * *Bonus (+4 pts):* Advanced Playmaker, Sweeper Keeper, Ball-Playing Defender.
+        * *Penalty (-2 pts):* Traditional Keeper, Target Man.
+* *Total:* A perfectly synergized team hits 40/40. 
+
+#### 3. Formation Familiarity (Max 30 Points)
+*Are the players comfortable in the shape you drew up on the board?*
+* **The Math:** The game compares the user's chosen formation to the `best_formation` string in the player's JSON profile.
+* **The Rules:**
+    * **Exact Match (+2.7 points per player):** If De Bruyne's best formation is 4-3-3 and you play a 4-3-3, full points. (11 players × 2.7 = ~30 points).
+    * **Partial Match (+1 point):** If the shape is similar (e.g., preferred 4-3-3, but playing 4-2-3-1).
+    * **No Match (0 points):** Forcing a 4-3-3 player into a 3-5-2 system. 
+
+---
+
+### 🏆 The Thresholds & Verdicts (The Grading System)
+
+Once the engine calculates the score out of 100, the user receives one of these 7 screens. This gives the game immense replayability because users will want to share their "Elite" screenshots on social media.
+
+* **90 - 100: Elite (The Guardiola Tier)**
+    * *Message:* "Masterclass. You perfectly balanced player roles with your tactical philosophy. You didn't just pick the best players; you built the best *team*."
+* **80 - 89: Excellent (Champions League Contender)**
+    * *Message:* "Brilliant setup. You have a clear tactical identity and the right profiles to execute it, with only one or two minor compromises."
+* **70 - 79: Good (Top Half Finish)**
+    * *Message:* "A solid, functional team. You understand the basics of squad building, but against an elite tactician, your system has exploitable flaws."
+* **60 - 69: Decent (Mid-Table Survivor)**
+    * *Message:* "Vibes and individual brilliance. You are relying on your star players to bail you out because your tactical synergy is practically non-existent."
+* **50 - 59: Poor (Relegation Dogfight)**
+    * *Message:* "A confused mess. You are asking players to perform roles they are not suited for in a system they don't understand."
+* **40 - 49: Bad (Sacked by Christmas)**
+    * *Message:* "A tactical disaster. The board has lost faith, the fans are protesting, and the players are leaking stories to the press."
+* **0 - 39: Get Out (Armchair Fraud)**
+    * *Message:* "Did you put a striker in goal? Turn off the game and go watch golf. You are a danger to the sport of football."
+

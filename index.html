@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ball Knowledge — The Tactical Football Game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  SCREEN 0 — LANDING                                     -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-landing" class="screen active">
+    <div class="landing-bg">
+      <div class="pitch-lines"></div>
+      <div class="grain"></div>
+    </div>
+    <div class="landing-content">
+      <div class="logo-block">
+        <span class="logo-eyebrow">THE TACTICAL FOOTBALL GAME</span>
+        <h1 class="logo-title">BALL<br>KNOWLEDGE</h1>
+        <p class="logo-sub">Build your squad. Choose your tactics.<br>Prove you understand the beautiful game.</p>
+      </div>
+      <div class="landing-badges">
+        <div class="badge"><span class="badge-num">130</span><span class="badge-label">Players</span></div>
+        <div class="badge"><span class="badge-num">3</span><span class="badge-label">Stages</span></div>
+        <div class="badge"><span class="badge-num">15</span><span class="badge-label">Formations</span></div>
+        <div class="badge"><span class="badge-num">100</span><span class="badge-label">Max Score</span></div>
+      </div>
+      <button class="btn-primary btn-huge" onclick="startGame()">
+        <span>KICK OFF</span>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <p class="landing-hint">Complete challenges → Build your Starting XI → Discover your tactical IQ</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  STAGE INTRO OVERLAY                                    -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="stage-intro" class="screen">
+    <div class="stage-intro-inner">
+      <div class="stage-intro-badge" id="intro-badge">STAGE 1</div>
+      <h2 class="stage-intro-title" id="intro-title">QUIZ ROUND</h2>
+      <p class="stage-intro-desc" id="intro-desc">Answer 4 football trivia questions. Each correct answer lets you handpick your player. Wrong? You still get one — but fate decides.</p>
+      <div class="stage-intro-reward" id="intro-reward">
+        <div class="reward-item correct"><span class="reward-icon">✓</span><span>Correct → Choose from 50 players</span></div>
+        <div class="reward-item wrong"><span class="reward-icon">✗</span><span>Wrong → Random player (OVR &lt; 65)</span></div>
+      </div>
+      <button class="btn-primary" id="intro-btn" onclick="dismissIntro()">LET'S GO</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  SCREEN 1 — QUIZ STAGE                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-quiz" class="screen">
+    <div class="game-header">
+      <div class="header-left">
+        <span class="stage-label">STAGE 1</span>
+        <span class="stage-name">QUIZ ROUND</span>
+      </div>
+      <div class="header-center">
+        <div class="squad-mini" id="squad-mini-quiz"></div>
+      </div>
+      <div class="header-right">
+        <span class="q-counter" id="q-counter">Q 1 / 4</span>
+      </div>
+    </div>
+
+    <div class="quiz-container">
+      <div class="quiz-difficulty-bar">
+        <div class="diff-pip active" id="diff-0"></div>
+        <div class="diff-pip" id="diff-1"></div>
+        <div class="diff-pip" id="diff-2"></div>
+        <div class="diff-pip" id="diff-3"></div>
+        <span class="diff-label" id="diff-label">EASY</span>
+      </div>
+
+      <div class="timer-bar-wrap">
+        <div class="timer-bar" id="timer-bar"></div>
+      </div>
+
+      <div class="quiz-card" id="quiz-card">
+        <p class="question-text" id="question-text">Loading question...</p>
+        <div class="options-grid" id="options-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  PLAYER SELECT OVERLAY                                  -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-player-select" class="screen">
+    <div class="player-select-header">
+      <div class="ps-status" id="ps-status">
+        <span class="ps-icon correct-icon">✓</span>
+        <span id="ps-title">Correct! Choose your player.</span>
+      </div>
+      <p class="ps-hint" id="ps-hint">Showing 50 players · Pick wisely</p>
+    </div>
+    <div class="player-grid" id="player-grid"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  SCREEN 2 — GUESS THE PLAYER                           -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-guess" class="screen">
+    <div class="game-header">
+      <div class="header-left">
+        <span class="stage-label">STAGE 2</span>
+        <span class="stage-name">GUESS THE PLAYER</span>
+      </div>
+      <div class="header-center">
+        <div class="squad-mini" id="squad-mini-guess"></div>
+      </div>
+      <div class="header-right">
+        <span class="q-counter" id="guess-counter">RD 1 / 3</span>
+      </div>
+    </div>
+
+    <div class="guess-container">
+      <div class="mystery-card" id="mystery-card">
+        <div class="mystery-badge">?</div>
+        <div class="mystery-pos" id="mystery-pos">MIDFIELDER</div>
+        <div class="mystery-attrs" id="mystery-attrs"></div>
+        <div class="mystery-rating">
+          <span class="mr-label">OVERALL</span>
+          <span class="mr-val" id="mystery-rating-val">--</span>
+        </div>
+        <div class="mystery-nation" id="mystery-nation"></div>
+      </div>
+
+      <div class="guess-options" id="guess-options"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  SCREEN 3 — HIGHER OR LOWER                            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-hol" class="screen">
+    <div class="game-header">
+      <div class="header-left">
+        <span class="stage-label">STAGE 3</span>
+        <span class="stage-name">HIGHER OR LOWER</span>
+      </div>
+      <div class="header-center">
+        <div class="squad-mini" id="squad-mini-hol"></div>
+      </div>
+      <div class="header-right">
+        <span class="q-counter" id="hol-round-label">RD 1 / 3</span>
+      </div>
+    </div>
+
+    <div class="hol-container">
+      <div class="streak-bar">
+        <span class="streak-label">STREAK</span>
+        <div class="streak-pips">
+          <div class="streak-pip" id="sp-0"></div>
+          <div class="streak-pip" id="sp-1"></div>
+          <div class="streak-pip" id="sp-2"></div>
+        </div>
+        <span class="streak-need">Need 3 in a row</span>
+      </div>
+
+      <div class="hol-arena">
+        <div class="hol-card base-card" id="hol-base-card">
+          <div class="hol-player-name" id="hol-base-name">Kevin De Bruyne</div>
+          <div class="hol-stat-name" id="hol-stat-name">PASSING</div>
+          <div class="hol-stat-val" id="hol-base-val">94</div>
+          <div class="hol-nation" id="hol-base-nation">Belgium</div>
+        </div>
+
+        <div class="hol-vs">VS</div>
+
+        <div class="hol-card challenge-card" id="hol-chal-card">
+          <div class="hol-player-name" id="hol-chal-name">Toni Kroos</div>
+          <div class="hol-stat-name">PASSING</div>
+          <div class="hol-stat-val mystery">?</div>
+          <div class="hol-nation" id="hol-chal-nation">Germany</div>
+        </div>
+      </div>
+
+      <div class="hol-buttons">
+        <button class="btn-hol higher" onclick="holGuess('higher')">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+          HIGHER
+        </button>
+        <button class="btn-hol lower" onclick="holGuess('lower')">
+          LOWER
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </button>
+      </div>
+
+      <div class="hol-result" id="hol-result"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  SCREEN 4 — LINEUP BUILDER                             -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-builder" class="screen">
+    <div class="builder-layout">
+      <div class="builder-sidebar">
+        <div class="sidebar-header">
+          <span class="stage-label">FINAL STAGE</span>
+          <span class="stage-name">BUILD YOUR XI</span>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">FORMATION</label>
+          <select class="control-select" id="formation-select" onchange="changeFormation()">
+            <option value="4-3-3">4-3-3 (Holding)</option>
+            <option value="4-2-3-1">4-2-3-1 (Wide)</option>
+            <option value="4-4-2">4-4-2 (Classic)</option>
+            <option value="4-4-2d">4-4-2 (Diamond)</option>
+            <option value="4-3-2-1">4-3-2-1 (Xmas Tree)</option>
+            <option value="4-5-1">4-5-1 (Flat)</option>
+            <option value="4-2-3-1n">4-2-3-1 (Narrow)</option>
+            <option value="4-3-3a">4-3-3 (Attacking)</option>
+            <option value="3-4-2-1">3-4-2-1 (Double 10s)</option>
+            <option value="3-5-2">3-5-2 (With CDM)</option>
+            <option value="3-4-3">3-4-3 (Flat)</option>
+            <option value="3-5-2f">3-5-2 (Flat Mid)</option>
+            <option value="5-3-2">5-3-2</option>
+            <option value="5-4-1">5-4-1</option>
+            <option value="3-4-3d">3-4-3 (Diamond)</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label">TACTIC</label>
+          <select class="control-select" id="tactic-select">
+            <option value="positional">Positional Play</option>
+            <option value="gegenpressing">Gegenpressing</option>
+            <option value="counter">Deep Block & Counter</option>
+            <option value="vertical">Vertical Tiki-Taka</option>
+            <option value="overload">Overload & Isolate</option>
+          </select>
+        </div>
+
+        <div class="squad-bench" id="squad-bench">
+          <p class="bench-title">YOUR SQUAD</p>
+          <div class="bench-list" id="bench-list"></div>
+        </div>
+
+        <button class="btn-primary btn-submit" id="submit-btn" onclick="submitLineup()">
+          ANALYSE LINEUP
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <div class="builder-pitch-wrap">
+        <div class="pitch" id="pitch">
+          <div class="pitch-markings">
+            <div class="pitch-center-circle"></div>
+            <div class="pitch-halfway"></div>
+            <div class="pitch-box top"></div>
+            <div class="pitch-box-small top"></div>
+            <div class="pitch-box bottom"></div>
+            <div class="pitch-box-small bottom"></div>
+          </div>
+          <div class="pitch-slots" id="pitch-slots"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!--  SCREEN 5 — RESULTS                                    -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <div id="screen-results" class="screen">
+    <div class="results-bg" id="results-bg"></div>
+    <div class="results-content">
+      <div class="score-reveal">
+        <div class="score-ring" id="score-ring">
+          <svg class="score-svg" viewBox="0 0 200 200">
+            <circle class="score-track" cx="100" cy="100" r="85"/>
+            <circle class="score-fill" id="score-arc" cx="100" cy="100" r="85" stroke-dasharray="534" stroke-dashoffset="534"/>
+          </svg>
+          <div class="score-inner">
+            <span class="score-num" id="score-num">0</span>
+            <span class="score-denom">/100</span>
+          </div>
+        </div>
+        <div class="verdict-badge" id="verdict-badge">ELITE</div>
+        <p class="verdict-message" id="verdict-message"></p>
+      </div>
+
+      <div class="score-breakdown">
+        <div class="breakdown-item">
+          <span class="breakdown-label">POSITIONAL DISCIPLINE</span>
+          <div class="breakdown-bar-wrap">
+            <div class="breakdown-bar" id="bar-pos"></div>
+          </div>
+          <span class="breakdown-score" id="score-pos">0/30</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="breakdown-label">TACTICAL SYNERGY</span>
+          <div class="breakdown-bar-wrap">
+            <div class="breakdown-bar accent" id="bar-tac"></div>
+          </div>
+          <span class="breakdown-score" id="score-tac">0/40</span>
+        </div>
+        <div class="breakdown-item">
+          <span class="breakdown-label">FORMATION FAMILIARITY</span>
+          <div class="breakdown-bar-wrap">
+            <div class="breakdown-bar gold" id="bar-form"></div>
+          </div>
+          <span class="breakdown-score" id="score-form">0/30</span>
+        </div>
+      </div>
+
+      <div class="results-squad" id="results-squad"></div>
+
+      <button class="btn-primary" onclick="restartGame()">PLAY AGAIN</button>
+    </div>
+  </div>
+
+  <!-- PLAYER SLOT TOOLTIP -->
+  <div class="slot-tooltip" id="slot-tooltip"></div>
+
+  <script src="database.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
